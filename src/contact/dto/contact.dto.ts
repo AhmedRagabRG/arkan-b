@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class CreateAppointmentDto {
+export class CreateContactDto {
     @IsString()
     @IsNotEmpty()
     name: string;
@@ -11,7 +11,7 @@ export class CreateAppointmentDto {
 
     @IsString()
     @IsNotEmpty()
-    service: string;
+    message: string;
 
     @IsNotEmpty()
     date: Date;

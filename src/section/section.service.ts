@@ -49,7 +49,10 @@ export class SectionService {
           id: id,
         },
         data: {
-          name: updateSectionDto
+          name: updateSectionDto.name,
+          img: updateSectionDto.img,
+          content: updateSectionDto.content,
+          sectionId: updateSectionDto.sectionId
         }
       });
       if (!updatedSection) throw new Error('Error updating section');
@@ -59,7 +62,21 @@ export class SectionService {
     }
   }
 
-  remove(id: number) {
+  async remove(id: number) {
+    if (!id) throw new Error('No id provided');
+    const getSection = await this.findOne(id);
+    if (!getSection) throw new Error('section not found');
+    try {
+      const section = await this.databaseService.section.delete({
+        where: {
+          id: id,
+        },
+      });
+      if (!section) throw new Error('Error removing section');
+      return section;
+    } catch (error) {
+      console.log(error.message);
+    }
     return `This action removes a #${id} section`;
   }
 }

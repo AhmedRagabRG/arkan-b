@@ -11,10 +11,10 @@ import { GatewayIntentBits, Partials } from 'discord.js';
 import { DiscordModule } from '@discord-nestjs/core';
 import { ContactModule } from './contact/contact.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { ThrottlerModule } from '@nestjs/throttler';
 
 @Module({
   imports: [
-    
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
@@ -34,9 +34,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
       inject: [ConfigService]
     }),
     DiscordModule.forRootAsync({
-      useFactory: () => ({
-        token:
-          'MTMxMzkxMzgzNzA4MjI1MTQwNQ.GU5_LF.ErB84A-36wzdaS7rlI59mst8pNRU73hJPLJusU',
+      useFactory: (configService: ConfigService) => ({
+        token: configService.get('DISCORD_BOT_TOKEN'),
         discordClientOptions: {
           intents: [
             GatewayIntentBits.Guilds,
@@ -45,7 +44,14 @@ import { MailerModule } from '@nestjs-modules/mailer';
           partials: [Partials.Channel],
         },
       }),
+      inject: [ConfigService]
     }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60,
+        limit: 10,
+      }
+    ]),
     DatabaseModule,
     DoctorModule,
     SpecializationModule,
@@ -55,8 +61,6 @@ import { MailerModule } from '@nestjs-modules/mailer';
     ContactModule,
   ],
   controllers: [],
-  providers: [
-
-  ],
+  providers: [],
 })
-export class AppModule {}
+export class AppModule { }

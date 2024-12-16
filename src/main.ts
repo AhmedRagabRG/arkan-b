@@ -13,7 +13,14 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'https://arkaneyecenter.com',
+      'https://197.161.91.10',
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
   await app.listen(port);
 }
 bootstrap();

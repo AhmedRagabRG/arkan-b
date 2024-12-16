@@ -22,7 +22,6 @@ import { UserMailerService } from 'src/common/services/mailer.service';
         },
       }),
     }),
-    
   ],
 })
 export class ContactModule {}
